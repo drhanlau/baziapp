@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Upload, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { convertToLunar, analyze } from '@/lib/dateutils';
 import Markdown from 'react-markdown'
 
@@ -12,8 +12,6 @@ const BaziAnalyzer = () => {
   const [gregorianTime, setGregorianTime] = useState('');
   const [lunarDate, setLunarDate] = useState('');
   const [results, setResults] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
 
