@@ -16,7 +16,7 @@ const BaziAnalyzer = () => {
 
 
   // Modify handleSubmit
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event : any) => {
     event.preventDefault();
     setIsLoading(true);
     try {
