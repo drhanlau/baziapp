@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Calendar } from 'lucide-react';
-import { convertToLunar, analyze } from '@/lib/dateutils';
+import { convertToLunar, analyze, LunarDate } from '@/lib/dateutils';
 import Markdown from 'react-markdown'
 
 
