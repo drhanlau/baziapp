@@ -4,13 +4,18 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Upload, Calendar } from 'lucide-react';
 import { convertToLunar, analyze } from '@/lib/dateutils';
+import Markdown from 'react-markdown'
+
 
 const BaziAnalyzer = () => {
   const [gregorianDate, setGregorianDate] = useState('');
   const [gregorianTime, setGregorianTime] = useState('');
   const [lunarDate, setLunarDate] = useState('');
+  const [results, setResults] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -24,12 +29,19 @@ const BaziAnalyzer = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  // Modify handleSubmit
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // 這裡可以添加分析邏輯
-    analyze();
+    setIsLoading(true);
+    try {
+      const results = await analyze(lunarDate);
+      setResults(results || '');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <Card className="max-w-2xl mx-auto">
@@ -96,6 +108,7 @@ const BaziAnalyzer = () => {
                   />
                 </div>
                 <div className="col-span-2">
+
                   <button
                     onClick={() => {
                       const dateParts = gregorianDate.split('-');
@@ -159,13 +172,7 @@ const BaziAnalyzer = () => {
               </div>
             </div>
 
-            {/* 提交按鈕 */}
-            <button
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              開始分析
-            </button>
-          </form>
+
 
           {/* Bazi Display Grid */}
           <div className="mt-8 border-t pt-6">
@@ -209,16 +216,37 @@ const BaziAnalyzer = () => {
             </div>
           </div>
 
+            <button
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  分析中...
+                </>
+              ) : (
+                '開始分析'
+              )}
+            </button>
+          </form>
 
-          <div className="mt-8 border-t pt-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">八字解析</h3>
+          {results && (
+            <div className="mt-8 border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-6">八字解析</h3>
 
-            {/* 流年運勢 */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="space-y-2">
+              {/* 流年運勢 */}
+              <div className="bg-gray-50 rounded-lg p-4 analysis">
+                <div className="space-y-2">
+                  <Markdown>{results}</Markdown>
+                  <p>想要知道更多如何利用 AI 轉運，找到好人緣，也可以參加我們的來臨的【<a href="https://ticket.jooymedia.com" className="mt-5 text-blue-600 font-medium hover:text-blue-800 underline decoration-2 underline-offset-2 hover:decoration-blue-800 transition-colors duration-200" target="_blank" rel="noopener noreferrer">AI轉運站</a>】工作坊喔！</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
         </CardContent>
       </Card>

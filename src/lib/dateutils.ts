@@ -1,14 +1,15 @@
 import { Solar } from "lunar-javascript";
-
+import OpenAI from "openai";
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
 });
 
 interface LunarDate {
   lunar: string;
   dateobject: Solar;
   lunaryear: string;
-  lunarmonth:string;
+  lunarmonth: string;
   lunarday: string;
   nian: string;
   yue: string;
@@ -74,7 +75,7 @@ function calculateTimeStem(dayStem: HeavenlyStem, hour: number): { data: { stem:
 
   console.log({ data: { stem, branch }, shizhu: `${stem}${branch}` })
 
-  return { data:{stem, branch}, shizhu: `${stem}${branch}` };
+  return { data: { stem, branch }, shizhu: `${stem}${branch}` };
 }
 
 
@@ -95,8 +96,8 @@ export const convertToLunar = (year: number, month: number, day: number, hour: n
     dateobject: solar,
     lunaryear: lunar.getYearInGanZhi(),
     lunarmonth: lunar.getMonthInChinese(),
-    lunarday: lunar.getDay(),
-    lunarhour:shizhu[1],
+    lunarday: lunar.getDayInChinese(),
+    lunarhour: shizhu[1],
     nianStem: lunar.getYearInGanZhi()[0],
     nianBranch: lunar.getYearInGanZhi()[1],
     yueStem: lunar.getMonthInGanZhi()[0],
@@ -108,34 +109,28 @@ export const convertToLunar = (year: number, month: number, day: number, hour: n
   };
 };
 
-export const analyze = () => {
-  console.log('analyze')
-  const makeOpenAIRequest = async () => {
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "user",
-              content: `測試乙巳年運程, 八字年干為 ${lunar.getYearInGanZhi()[0]}, 年支為 ${lunar.getYearInGanZhi()[1]}, 八字月干為 ${lunar.getMonthInGanZhi()[0]}, 月支為 ${lunar.getMonthInGanZhi()[1]}, 八字日干為 ${lunar.getDayInGanZhi()[0]}, 日支為 ${lunar.getDayInGanZhi()[1]}, 八字時干為 ${shizhu[0]}, 時支為 ${shizhu[1]}`
-            }
-          ],
-          temperature: 0.7
-        })
-      });
+export const analyze = async (lunarDate: LunarDate) => {
 
-      const data = await response.json();
-      console.log(data);
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error('Error calling OpenAI API:', error);
-      throw error;
-    }
-  };
+  console.log('analyze')
+
+  const prompt = `測試乙巳年運程, 八字年天干為 ${lunarDate.nianStem}, 八字年地支為 ${lunarDate.nianBranch}, 八字月天干為 ${lunarDate.yueStem}, 八字月地支為 ${lunarDate.yueBranch}, 八字日天干為 ${lunarDate.riStem}, 八字日地支為 ${lunarDate.riBranch}, 八字時天干為 ${lunarDate.shiStem}, 八字時地支為 ${lunarDate.shiBranch}. Please respond in Simplfied Chinese.`
+
+
+  try {
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      store: true,
+      messages: [
+        { "role": "user", "content": prompt }
+      ]
+    });
+
+    // console.log("completion", completion.choices[0].message.content);
+    return completion.choices[0].message.content;
+
+  } catch (error) {
+    console.error('OpenAI API error:', error);
+    throw error;
+  }
 }
