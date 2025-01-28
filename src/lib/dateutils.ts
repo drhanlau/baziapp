@@ -99,7 +99,14 @@ function calculateTimeStem(
   const branch = earthlyBranch?.branch ?? "子";
 
   // 確定天干
-  const stems = STEM_BRANCH_TABLE[dayStem as HeavenlyStem];
+
+  const ds: HeavenlyStem = dayStem[0] as HeavenlyStem;
+
+  console.log("ds", ds);
+  const stems = STEM_BRANCH_TABLE[ds];
+
+  console.log("stems", stems);
+
   const index = TIME_PERIODS.findIndex((period) => period.branch === branch);
   const stem = stems[index];
 
