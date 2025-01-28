@@ -59,7 +59,7 @@ const BaziAnalyzer = () => {
               </label>
               <div className="grid grid-cols-7 gap-4">
                 <div className="relative col-span-3">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hidden sm:block" />
                   <input
                     type="date"
                     value={gregorianDate}
@@ -210,7 +210,7 @@ const BaziAnalyzer = () => {
               <div className="bg-gray-50 rounded-lg p-4 analysis">
                 <div className="space-y-2">
                   <Markdown>{results}</Markdown>
-                  <p>想要知道更多如何利用 AI 轉運，找到好人緣，也可以參加我們的來臨的【<a href="https://ticket.jooymedia.com" className="mt-5 text-blue-600 font-medium hover:text-blue-800 underline decoration-2 underline-offset-2 hover:decoration-blue-800 transition-colors duration-200" target="_blank" rel="noopener noreferrer">AI轉運站</a>】工作坊喔！</p>
+                  <p>想要知道更多如何利用 AI 轉運，找到好人緣，也可以參加我們的來臨的【<a href="https://ticket.jooymedia.com" className="mt-5 text-blue-600 font-medium hover:text-blue-800 underline decoration-2 underline-offset-2 hover:decoration-blue-800 transition-colors duration-200" target="_blank" rel="noopener noreferrer">AI轉運站</a>】工作坊，學習各種不同的 AI 結合命理的技巧喔！</p>
                 </div>
               </div>
             </div>
@@ -221,7 +221,7 @@ const BaziAnalyzer = () => {
       <div className="mt-8">
         <img src="/lead-logo-2024-black.png" alt="Lead Logo 2024 Black" className="mx-auto w-24" />
         <p className="text-center text-sm text-gray-500 mt-5">All rights reserved UCAN Technologies Sdn. Bhd. 2025</p>
-        <p className="text-center text-sm text-gray-500 mt-5 w-1/2 mx-auto">此應用僅用於展示AI在命理預測中的能力。它不是用來傳播迷信或宣揚任何宗教活動。<br/>更多的讓大家了解中國習俗在 AI 時代的應用。所有代碼是根據網上開源代碼，僅供學習使用，準確性請自行判斷。</p>
+        <p className="text-center text-sm text-gray-500 mt-5 md:w-1/2 mx-auto">本應用程式僅作為AI命理預測能力的展示用途，不涉及任何宗教或迷信活動的推廣。我們希望透過此應用展示中國傳統文化如何在AI時代創新應用。本程式採用開源程式碼開發，僅供學習參考，預測結果請自行判斷其準確性。</p>
       <p></p>
       </div>
 
