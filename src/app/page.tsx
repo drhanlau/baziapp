@@ -10,7 +10,7 @@ import Markdown from 'react-markdown'
 const BaziAnalyzer = () => {
   const [gregorianDate, setGregorianDate] = useState('');
   const [gregorianTime, setGregorianTime] = useState('');
-  const [lunarDate, setLunarDate] = useState('');
+  const [lunarDate, setLunarDate] = useState<LunarDate>({ lunaryear: '', lunarmonth: '', lunarday: '', lunarhour: '', nianStem: '', nianBranch: '', yueStem: '', yueBranch: '', riStem: '', riBranch: '', shiStem: '', shiBranch: '' });
   const [results, setResults] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
