@@ -7,14 +7,19 @@ const openai = new OpenAI({
 
 export interface LunarDate {
   lunar: string;
-  dateobject: Solar;
+  dateobject: InstanceType<typeof Solar>;
   lunaryear: string;
   lunarmonth: string;
   lunarday: string;
-  nian: string;
-  yue: string;
-  ri: string;
-  shi: string;
+  lunarhour: string;
+  nianStem: string;
+  nianBranch: string;
+  yueStem: string;
+  yueBranch: string;
+  riStem: string;
+  riBranch: string;
+  shiStem: string;
+  shiBranch: string;
 }
 
 // 八字的時柱計算
@@ -91,10 +96,10 @@ function calculateTimeStem(
     return hour >= period.start && hour < period.end;
   });
 
-  const branch = earthlyBranch?.branch;
+  const branch = earthlyBranch?.branch ?? "子";
 
   // 確定天干
-  const stems = STEM_BRANCH_TABLE[dayStem[0]];
+  const stems = STEM_BRANCH_TABLE[dayStem as HeavenlyStem];
   const index = TIME_PERIODS.findIndex((period) => period.branch === branch);
   const stem = stems[index];
 
